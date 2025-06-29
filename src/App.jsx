@@ -172,11 +172,18 @@ function App() {
 
             {/* Forecast Cards */}
 
-            <ForecastCards/>
+            <ForecastCards 
+            groupedForecast = {groupedForecast}
+            next3Days = {next3Days}
+            selectedDay = {selectedDay}
+            onDaySelect = {setSelectedDay}
+            />
 
             {/* Hourly forecast */}
 
-            <HourlyForecast/>
+            <HourlyForecast
+            
+            />
 
           </div>
       </div>

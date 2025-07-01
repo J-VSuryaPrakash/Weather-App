@@ -59,4 +59,4 @@ function CurrentWeather({ data }) {
   );
 }
 
-export { CurrentWeather };
+export { CurrentWeather }

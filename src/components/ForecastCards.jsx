@@ -36,11 +36,7 @@ function ForecastCards({ groupedForecast, next3Days, selectedDay, onDaySelect })
             <button
               key={day}
               onClick={() => onDaySelect(day)}
-              className={`p-4 rounded-xl transition-all duration-200 text-left ${
-                isSelected
-                  ? "bg-white text-blue-600 shadow-lg scale-105"
-                  : "bg-white/10 backdrop-blur-md text-white hover:bg-white/20"
-              }`}
+              className={`p-4 rounded-xl transition-all duration-200 text-left ${isSelected ? "bg-white text-blue-600 shadow-lg scale-105" : "bg-white/10 backdrop-blur-md text-white hover:bg-white/20"}`}
             >
               <div className="flex items-center justify-between mb-3">
                 <div>
@@ -50,16 +46,14 @@ function ForecastCards({ groupedForecast, next3Days, selectedDay, onDaySelect })
                   </div>
                 </div>
                 <img
-                  src={getWeatherIcon(stats.icon) || "/placeholder.svg"}
+                  src={getWeatherIcon(stats.icon)}
                   alt={stats.description}
                   className="w-12 h-12"
                 />
               </div>
               <div className="flex justify-between items-center">
                 <div className="text-2xl font-bold">{Math.round(stats.max)}°</div>
-                <div className={`text-lg ${isSelected ? "text-blue-400" : "text-blue-200"}`}>
-                  {Math.round(stats.min)}°
-                </div>
+                <div className={`text-lg ${isSelected ? "text-blue-400" : "text-blue-200"}`}>{Math.round(stats.min)}°</div>
               </div>
             </button>
           )
@@ -70,4 +64,4 @@ function ForecastCards({ groupedForecast, next3Days, selectedDay, onDaySelect })
 
 }
 
-export  default ForecastCards
+export {ForecastCards}

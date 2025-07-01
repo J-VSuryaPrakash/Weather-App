@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { MapPin, Loader2 } from "lucide-react"
 import { CurrentWeather } from './components/CurrentWeather'
+import { HourlyForecast } from './components/HourlyForecast'
+import { ForecastCards } from './components/ForecastCards'
 import './index.css'
 
 function App() {
@@ -66,7 +68,7 @@ function App() {
 
   }
 
-  const groupedForecast = (forecast) => {
+  const getGroupedForecast = (forecast) => {
     const group = {}
 
     forecast.foEach((item) => {
@@ -81,7 +83,7 @@ function App() {
     return group
   }
 
-  const next3Days = () => {
+  const getNext3Days = () => {
     const days = []
     const today = new Date()
 
@@ -131,6 +133,12 @@ function App() {
 
   }
 
+  if (!weatherData) return null
+
+  const groupedForecast = getGroupedForecast(weatherData.forecast)
+  const next3Days = getNext3Days()
+  const selectedDayForecast = groupedForecast[selectedDay] || []
+
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600">
@@ -142,22 +150,22 @@ function App() {
                 <MapPin className="w-5 h-5" />
                 <h1 className="text-2xl font-bold text-black">
                   Hyderabad
-                    {/* {weatherData.location.name}, {weatherData.location.country} */}
+                    {weatherData.location.name}, {weatherData.location.country}
                 </h1>  
               </div> 
               <p >Weather Forecast</p>     
-              <form action="">
-                <div>
+              <form onSubmit={handleSearch} className="max-w-md mx-auto">
+                <div className="flex gap-2">
                   <input 
                     type="text"
-                    // value={searchCity}
+                    value={searchCity}
                     onChange={(e) => setSearchCity(e.target.value)}
                     placeholder='Search for a city...'
                     className="flex-1 px-4 py-2 rounded-lg bg-white/10 backdrop-blur-md text-white placeholder-blue-200 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent"
                   />
                   <button
                     type="submit"
-                    // disabled={!searchCity.trim() || loading}
+                    disabled={!searchCity.trim() || loading}
                     className="px-6 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium hover:cursor-pointer"
                   >
                     Search
@@ -181,9 +189,12 @@ function App() {
 
             {/* Hourly forecast */}
 
-            <HourlyForecast
-            
-            />
+            {
+              selectedDayForecast.length > 0 &&
+              <HourlyForecast
+             forecast={selectedDayForecast} 
+             selectedDay={selectedDay}
+            />}
 
           </div>
       </div>

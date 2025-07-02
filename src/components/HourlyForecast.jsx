@@ -1,6 +1,6 @@
 import { Clock, Droplets, Wind } from "lucide-react"
 
-function HourlyForecast(){
+function HourlyForecast({forecast, selectedDay }){
 
   const formatTime = (timestamp) => {
     return new Date(timestamp * 1000).toLocaleTimeString("en-US", {

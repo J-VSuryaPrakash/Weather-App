@@ -29,14 +29,14 @@ function ForecastCards({ groupedForecast, next3Days, selectedDay, onDaySelect })
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {next3Days.map((day, index) => {
           const dayForecast = groupedForecast[day] || []
-          const stats = getDayStats(dayForecast)
+          const stats = getDayStats(dayForecast)          
           const isSelected = selectedDay === day
 
           return (
             <button
               key={day}
               onClick={() => onDaySelect(day)}
-              className={`p-4 rounded-xl transition-all duration-200 text-left ${isSelected ? "bg-white text-blue-600 shadow-lg scale-105" : "bg-white/10 backdrop-blur-md text-white hover:bg-white/20"}`}
+              className={`p-4 rounded-xl transition-all duration-200 text-left ${isSelected ? "bg-gray-300 text-blue-600 shadow-lg scale-105" : "bg-white/10 backdrop-blur-md text-white hover:bg-white/20"} hover:cursor-pointer`}
             >
               <div className="flex items-center justify-between mb-3">
                 <div>

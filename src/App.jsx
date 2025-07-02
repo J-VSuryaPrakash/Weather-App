@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { MapPin, Loader2 } from "lucide-react"
 import { CurrentWeather } from './components/CurrentWeather'
 import { HourlyForecast } from './components/HourlyForecast'
@@ -11,11 +11,15 @@ function App() {
   const [searchCity, setSearchCity] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
-  const [selectedDay, setSelectedDay] = useState("")
+  const [selectedDay, setSelectedDay] = useState()
   const [currentCity, setCurrentCity] = useState("Hyderabad")
 
+  useEffect(() => {
+    getWeatherData()
+  }, [])
+
   // Openweathermap API key
-  const API_KEY = process.env.API_KEY
+  const API_KEY = import.meta.env.VITE_API_KEY
 
   const getWeatherData = async (cityName = currentCity)=>{
 
@@ -24,7 +28,7 @@ function App() {
       setLoading(true)
       setError("")
       
-      const geoLocation = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`)
+      const geoLocation = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=${API_KEY}`)
       const geoData = await geoLocation.json()
 
       if(!geoData){
@@ -47,11 +51,11 @@ function App() {
         location: {name, country}
       })
 
-      const today = new Date().toDateString()
+      const today = new Date().toISOString().split('T')[0]      
       setSelectedDay(today)
 
     } catch (error) {
-      setError(error instanceof Error ? err.message : "Failed to fetch weather data")
+      setError(error instanceof Error ? error.message : "Failed to fetch weather data")
     } finally {
       setLoading(false)
     }
@@ -71,7 +75,7 @@ function App() {
   const getGroupedForecast = (forecast) => {
     const group = {}
 
-    forecast.foEach((item) => {
+    forecast.forEach((item) => {
       const date = item.dt_txt.split(" ")[0];
       if(!group[date]){
         group[date] = []
@@ -81,19 +85,6 @@ function App() {
     })
 
     return group
-  }
-
-  const getNext3Days = () => {
-    const days = []
-    const today = new Date()
-
-    for (let i = 0; i < 3; i++) {
-      const date = new Date(today)
-      date.setDate(today.getDate() + i)
-      days.push(date.toDateString())
-    }
-
-    return days
   }
 
   if(loading){
@@ -134,11 +125,11 @@ function App() {
   }
 
   if (!weatherData) return null
-
+  
   const groupedForecast = getGroupedForecast(weatherData.forecast)
-  const next3Days = getNext3Days()
-  const selectedDayForecast = groupedForecast[selectedDay] || []
-
+  const next3Days = Object.keys(groupedForecast).slice(0,3)
+  const selectedDayForecast = groupedForecast[selectedDay] || []  
+  
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600">
@@ -148,12 +139,11 @@ function App() {
             <div className="text-center mb-8">
               <div className="flex items-center justify-center gap-2 text-white mb-2">
                 <MapPin className="w-5 h-5" />
-                <h1 className="text-2xl font-bold text-black">
-                  Hyderabad
+                <h1 className="text-4xl font-bold text-white">
                     {weatherData.location.name}, {weatherData.location.country}
                 </h1>  
               </div> 
-              <p >Weather Forecast</p>     
+              <p className="text-lg text-gray-300 mb-0.5">Weather Forecast</p>     
               <form onSubmit={handleSearch} className="max-w-md mx-auto">
                 <div className="flex gap-2">
                   <input 
@@ -176,7 +166,7 @@ function App() {
 
             {/* Weather */}
 
-            <CurrentWeather currentWeatherData = {weatherData.weather}/>
+            <CurrentWeather data = {weatherData.weather}/>
 
             {/* Forecast Cards */}
 

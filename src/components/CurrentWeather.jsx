@@ -18,7 +18,7 @@ function CurrentWeather({ data }) {
           <div>
             <h1 className="text-3xl font-bold mb-1">Current Weather</h1>
             <p className="text-blue-100 capitalize">
-              {CurrentWeather.weather[0].description}
+              {data.weather[0].description}
             </p>
           </div>
           <img
@@ -36,19 +36,19 @@ function CurrentWeather({ data }) {
             <div className="text-sm text-blue-100">Temperature</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-semibold mb-1">
+            <div className="text-3xl font-bold mb-1">
               {Math.round(data.main.feels_like)}°
             </div>
             <div className="text-sm text-blue-100">Feels like</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-semibold mb-1">
+            <div className="text-3xl font-bold mb-1">
               {data.main.humidity}%
             </div>
             <div className="text-sm text-blue-100">Humidity</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-semibold mb-1">
+            <div className="text-3xl font-bold mb-1">
               {Math.round(data.wind.speed)} m/s
             </div>
             <div className="text-sm text-blue-100">Wind Speed</div>
